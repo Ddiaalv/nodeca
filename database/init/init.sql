@@ -74,6 +74,15 @@ CREATE TABLE IF NOT EXISTS `material` (
 	`icon` VARCHAR(50) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS `monstruo_rango_material` (
+	`id_rango_material` INT NOT NULL PRIMARY KEY,
+	`id_monstruo` INT NOT NULL,
+	`id_material` INT NOT NULL,
+	`monstruo` VARCHAR(20) NOT NULL,
+	`zona` VARCHAR(30) NOT NULL,
+	`rango` VARCHAR(4) NOT NULL
+);
+
 -- FOREIGN KEYS
 ALTER TABLE monstruo_habitat
 ADD CONSTRAINT FK_MH_habitat
@@ -89,6 +98,18 @@ GO
 
 ALTER TABLE monstruo_punto_debil
 ADD CONSTRAINT FK_MPD_monstruo
+FOREIGN KEY (id_monstruo) REFERENCES monstruo(id_monstruo)
+ON UPDATE CASCADE ON DELETE RESTRICT;
+GO
+
+ALTER TABLE monstruo_rango_material
+ADD CONSTRAINT FK_MRM_material
+FOREIGN KEY (id_material) REFERENCES material(id_material)
+ON UPDATE CASCADE ON DELETE RESTRICT;
+GO
+
+ALTER TABLE monstruo_rango_material
+ADD CONSTRAINT FK_MRM_monstruo
 FOREIGN KEY (id_monstruo) REFERENCES monstruo(id_monstruo)
 ON UPDATE CASCADE ON DELETE RESTRICT;
 GO
@@ -137,4 +158,13 @@ FIELDS TERMINATED BY ','
 OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES (`id_material`,`nombre`,`icon`);
+GO
+
+LOAD DATA LOCAL INFILE '/var/lib/csv/monstruo_rango_material.csv'
+INTO TABLE monstruo_rango_material
+CHARACTER SET utf8
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES (`id_rango_material`,`id_monstruo`,`id_material`,`monstruo`,`zona`,`rango`);
 GO
