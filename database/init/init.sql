@@ -68,6 +68,12 @@ CREATE TABLE IF NOT EXISTS `monstruo_punto_debil` (
 	`zona` VARCHAR(20) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS `material` (
+	`id_material` INT NOT NULL PRIMARY KEY,
+	`nombre` VARCHAR(100)NOT NULL,
+	`icon` VARCHAR(50) NOT NULL
+);
+
 -- FOREIGN KEYS
 ALTER TABLE monstruo_habitat
 ADD CONSTRAINT FK_MH_habitat
@@ -122,4 +128,13 @@ FIELDS TERMINATED BY ','
 OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES (`id_punto_debil`,`id_monstruo`,`monstruo`,`corte`,`contundente`,`disparo`,`zona`);
+GO
+
+LOAD DATA LOCAL INFILE '/var/lib/csv/material.csv'
+INTO TABLE material
+CHARACTER SET utf8
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES (`id_material`,`nombre`,`icon`);
 GO
