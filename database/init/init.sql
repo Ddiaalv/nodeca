@@ -58,6 +58,16 @@ CREATE TABLE IF NOT EXISTS `monstruo_habitat` (
 );
 GO
 
+CREATE TABLE IF NOT EXISTS `monstruo_punto_debil` (
+	`id_punto_debil` INT NOT NULL PRIMARY KEY,
+	`id_monstruo` INT NOT NULL,
+	`monstruo` VARCHAR(20) NOT NULL,
+	`corte` INT NOT NULL,
+	`contundente` INT NOT NULL,
+	`disparo` INT NOT NULL,
+	`zona` VARCHAR(20) NOT NULL
+);
+
 -- FOREIGN KEYS
 ALTER TABLE monstruo_habitat
 ADD CONSTRAINT FK_MH_habitat
@@ -67,6 +77,12 @@ GO
 
 ALTER TABLE monstruo_habitat
 ADD CONSTRAINT FK_MH_monstruo
+FOREIGN KEY (id_monstruo) REFERENCES monstruo(id_monstruo)
+ON UPDATE CASCADE ON DELETE RESTRICT;
+GO
+
+ALTER TABLE monstruo_punto_debil
+ADD CONSTRAINT FK_MPD_monstruo
 FOREIGN KEY (id_monstruo) REFERENCES monstruo(id_monstruo)
 ON UPDATE CASCADE ON DELETE RESTRICT;
 GO
@@ -97,4 +113,13 @@ FIELDS TERMINATED BY ','
 OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
 LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES (`id_monstruo_habitat`, `id_monstruo`, `id_habitat`);
+GO
+
+LOAD DATA LOCAL INFILE '/var/lib/csv/monstruo_punto_debil.csv'
+INTO TABLE monstruo_punto_debil
+CHARACTER SET utf8
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES (`id_punto_debil`,`id_monstruo`,`monstruo`,`corte`,`contundente`,`disparo`,`zona`);
 GO
