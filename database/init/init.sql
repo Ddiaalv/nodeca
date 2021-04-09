@@ -44,6 +44,32 @@ CREATE TABLE IF NOT EXISTS `monstruo` (
 );
 GO
 
+CREATE TABLE IF NOT EXISTS `habitat` (
+	`id_habitat` INT NOT NULL PRIMARY KEY,
+	`habitat` VARCHAR(50) NOT NULL,
+	`ruta` VARCHAR(50) NOT NULL
+);
+GO
+
+CREATE TABLE IF NOT EXISTS `monstruo_habitat` (
+	`id_monstruo_habitat` INT NOT NULL PRIMARY KEY,
+	`id_monstruo` INT NOT NULL,
+	`id_habitat` INT NOT NULL
+);
+GO
+
+-- FOREIGN KEYS
+ALTER TABLE monstruo_habitat
+ADD CONSTRAINT FK_MH_habitat
+FOREIGN KEY (id_habitat) REFERENCES habitat(id_habitat)
+ON UPDATE CASCADE ON DELETE RESTRICT;
+GO
+
+ALTER TABLE monstruo_habitat
+ADD CONSTRAINT FK_MH_monstruo
+FOREIGN KEY (id_monstruo) REFERENCES monstruo(id_monstruo)
+ON UPDATE CASCADE ON DELETE RESTRICT;
+GO
 
 -- IMPORTS
 LOAD DATA LOCAL INFILE '/var/lib/csv/monstruo.csv'
@@ -55,3 +81,20 @@ LINES TERMINATED BY '\r\n'
 IGNORE 1 LINES (`id_monstruo`, `orden_menu`, `nombre`, `ruta`, `especie`, `tipo`, `rango`, `caracteristicas`, `notas`, `tamano_min`, `tamano_max`, `fuego`, `agua`, `rayo`, `hielo`, `draco`, `veneno`, `sueno`, `paralisis`, `nitro`, `aturdimiento`, `elemento01`, `elemento01ruta`, `elemento02`, `elemento02ruta`, `resistencia01`, `resistencia01ruta`, `resistencia02`, `resistencia02ruta`, `resistencia03`, `resistencia03ruta`, `estado01`, `estado01ruta`, `estado02`, `estado02ruta`, `estado03`, `estado03ruta`);
 GO
 
+LOAD DATA LOCAL INFILE '/var/lib/csv/habitat.csv'
+INTO TABLE habitat
+CHARACTER SET utf8
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES (`id_habitat`, `habitat`, `ruta`);
+GO
+
+LOAD DATA LOCAL INFILE '/var/lib/csv/monstruo_habitat.csv'
+INTO TABLE monstruo_habitat
+CHARACTER SET utf8
+FIELDS TERMINATED BY ','
+OPTIONALLY ENCLOSED BY '"' ESCAPED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES (`id_monstruo_habitat`, `id_monstruo`, `id_habitat`);
+GO
